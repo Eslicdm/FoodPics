@@ -7,4 +7,7 @@ interface FoodApi {
 
     @GET("api/images/burger")
     suspend fun getAllBurgers(): Food
+
+    @GET("api/images/pizza")
+    suspend fun getAllPizza(): Food
 }

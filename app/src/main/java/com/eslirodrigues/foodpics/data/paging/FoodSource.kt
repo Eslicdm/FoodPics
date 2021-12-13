@@ -17,11 +17,12 @@ class FoodSource @Inject constructor(private val foodApi: FoodApi) : PagingSourc
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Food> {
         return try {
             val nextPage = params.key ?: 1
-            val foods = foodApi.getAllBurgers()
+            val pizza = Food(name = "pizza", image = foodApi.getAllPizza().image)
+            val burger = Food(name = "burger", image = foodApi.getAllBurgers().image)
             LoadResult.Page(
-                data = listOf(foods),
+                data = listOf(pizza, burger),
                 prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = if (foods.image.isEmpty()) null else nextPage + 1
+                nextKey = nextPage + 1
             )
         } catch (exception: IOException) {
             return LoadResult.Error(exception)

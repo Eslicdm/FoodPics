@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -29,5 +30,6 @@ fun FoodListItem(food: Food) {
                 .size(width = 411.dp, height = 267.dp)
         )
         Spacer(modifier = Modifier.padding(bottom = 16.dp))
+        Text(text = food.name)
     }
 }

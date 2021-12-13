@@ -1,8 +1,10 @@
 package com.eslirodrigues.foodpics.ui.screen
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.eslirodrigues.foodpics.data.model.Food
 import com.eslirodrigues.foodpics.ui.viewmodel.FoodViewModel
 import com.eslirodrigues.foodpics.util.FoodState
@@ -24,9 +25,22 @@ fun FoodListScreen(
     when (val result = viewModel.response.value) {
         is FoodState.Success -> {
             val food: LazyPagingItems<Food> = result.data.collectAsLazyPagingItems()
-            LazyRow {
-                items(food) { response ->
-                    FoodListItem(food = response!!)
+            val burgerList = food.itemSnapshotList.filter {
+                it?.name == "burger"
+            }
+            val pizzaList = food.itemSnapshotList.filter {
+                it?.name == "pizza"
+            }
+            Column(modifier = Modifier.fillMaxSize()) {
+                LazyRow {
+                    items(burgerList) { response ->
+                        FoodListItem(food = response!!)
+                    }
+                }
+                LazyRow {
+                    items(pizzaList) { response ->
+                        FoodListItem(food = response!!)
+                    }
                 }
             }
         }
