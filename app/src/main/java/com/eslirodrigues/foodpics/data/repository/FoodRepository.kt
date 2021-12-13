@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class FoodRepository @Inject constructor(private val foodApi: FoodApi) {
 
-    fun getAllFoods(): Flow<PagingData<Food>> = Pager(PagingConfig(pageSize = 6)) {
+    fun getAllFoods(): Flow<PagingData<Food>> = Pager(PagingConfig(pageSize = 1000)) {
         FoodSource(foodApi)
     }.flow.flowOn(Dispatchers.IO)
 }

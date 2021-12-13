@@ -2,6 +2,7 @@ package com.eslirodrigues.foodpics.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -19,17 +20,15 @@ import com.eslirodrigues.foodpics.ui.theme.DarkRed
 fun FoodListItem(food: Food) {
     Column(
         modifier = Modifier
-            .padding(vertical = 10.dp, horizontal = 7.dp)
-            .background(DarkRed)
+            .padding(10.dp)
+            .border(2.dp, DarkRed)
     ) {
         Image(
             painter = rememberImagePainter(food.image),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(width = 411.dp, height = 267.dp)
+                .size(width = 311.dp, height = 267.dp)
         )
-        Spacer(modifier = Modifier.padding(bottom = 16.dp))
-        Text(text = food.name)
     }
 }

@@ -19,8 +19,10 @@ class FoodSource @Inject constructor(private val foodApi: FoodApi) : PagingSourc
             val nextPage = params.key ?: 1
             val pizza = Food(name = "pizza", image = foodApi.getAllPizza().image)
             val burger = Food(name = "burger", image = foodApi.getAllBurgers().image)
+            val pasta = Food(name = "pasta", image = foodApi.getAllPasta().image)
+            val dessert = Food(name = "dessert", image = foodApi.getAllDessert().image)
             LoadResult.Page(
-                data = listOf(pizza, burger),
+                data = listOf(pizza, burger, pasta, dessert),
                 prevKey = if (nextPage == 1) null else nextPage - 1,
                 nextKey = nextPage + 1
             )

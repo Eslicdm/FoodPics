@@ -10,4 +10,10 @@ interface FoodApi {
 
     @GET("api/images/pizza")
     suspend fun getAllPizza(): Food
+
+    @GET("api/images/pasta")
+    suspend fun getAllPasta(): Food
+
+    @GET("api/images/dessert")
+    suspend fun getAllDessert(): Food
 }
