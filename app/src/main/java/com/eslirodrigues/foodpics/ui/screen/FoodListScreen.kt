@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -21,44 +22,47 @@ import com.eslirodrigues.foodpics.util.FoodState
 fun FoodListScreen(
     viewModel: FoodViewModel = hiltViewModel()
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .background(PrimaryRed)
-            .fillMaxSize()
-    ) {
-        items(1) {
-            when (val result = viewModel.response.value) {
-                is FoodState.Success -> {
-                    val food: LazyPagingItems<Food> = result.data.collectAsLazyPagingItems()
-                    val burgerList = food.itemSnapshotList.filter {
-                        it?.name == "burger"
-                    }
-                    val pizzaList = food.itemSnapshotList.filter {
-                        it?.name == "pizza"
-                    }
-                    val pastaList = food.itemSnapshotList.filter {
-                        it?.name == "pasta"
-                    }
-                    val dessertList = food.itemSnapshotList.filter {
-                        it?.name == "dessert"
-                    }
+    when (val result = viewModel.response.value) {
+        is FoodState.Success -> {
+            val food: LazyPagingItems<Food> = result.data.collectAsLazyPagingItems()
+            val burgerList = food.itemSnapshotList.filter {
+                it?.name == "burger"
+            }
+            val pizzaList = food.itemSnapshotList.filter {
+                it?.name == "pizza"
+            }
+            val pastaList = food.itemSnapshotList.filter {
+                it?.name == "pasta"
+            }
+            val dessertList = food.itemSnapshotList.filter {
+                it?.name == "dessert"
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .background(PrimaryRed)
+                    .fillMaxSize()
+            ) {
+                items(1) {
                     FoodRow(foodList = burgerList, foodName = "Burger")
                     FoodRow(foodList = pizzaList, foodName = "Pizza")
                     FoodRow(foodList = pastaList, foodName = "Pasta")
                     FoodRow(foodList = dessertList, foodName = "Dessert")
                 }
-                is FoodState.Failure -> {
-                    Text(text = "${result.msg}")
-                }
-                is FoodState.Loading -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                    }
-                }
-                is FoodState.Empty -> {
-                    Text(text = "Empty")
-                }
             }
+        }
+        is FoodState.Failure -> {
+            Text(text = "${result.msg}")
+        }
+        is FoodState.Loading -> {
+            Box(modifier = Modifier.fillMaxSize().background(PrimaryRed)) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+        is FoodState.Empty -> {
+            Text(text = "Empty")
         }
     }
 }
