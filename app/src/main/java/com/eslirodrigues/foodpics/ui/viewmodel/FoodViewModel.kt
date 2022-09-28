@@ -1,14 +1,14 @@
 package com.eslirodrigues.foodpics.ui.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eslirodrigues.foodpics.data.repository.FoodRepository
-import com.eslirodrigues.foodpics.util.FoodState
+import com.eslirodrigues.foodpics.ui.state.FoodState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,23 +16,16 @@ import javax.inject.Inject
 class FoodViewModel @Inject constructor(
     private val foodRepository: FoodRepository,
 ) : ViewModel() {
-    val response: MutableState<FoodState> = mutableStateOf(FoodState.Loading)
+    private val _foodState = MutableStateFlow(FoodState())
+    val foodState: StateFlow<FoodState> = _foodState.asStateFlow()
 
     init {
         getAllFoods()
     }
 
     private fun getAllFoods() = viewModelScope.launch {
-        foodRepository.getAllFoods()
-            .onStart {
-                response.value = FoodState.Loading
-            }
-            .catch {
-                response.value = FoodState.Failure(it)
-            }
-            .collect {
-                delay(1000L)
-                response.value = FoodState.Success(foodRepository.getAllFoods())
-            }
+        _foodState.update { it.copy(data = null, isLoading = true, errorMsg = null) }
+        val data = foodRepository.getAllFoods()
+        _foodState.update { it.copy(data = data, isLoading = false, errorMsg = null) }
     }
 }
